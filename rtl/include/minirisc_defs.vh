@@ -1,63 +1,72 @@
 // Copyright (c) Yug Bargaway under Apache License 2.0
 // See LICENSE.txt for details.
 
-// This file is generated from claude as a starter template and will be updated during the course of the implmentation
+// This file is generated from claude as a starter template and was updated during the course of the implmentation
 
 
 `ifndef MINIRISC_DEFS_VH
 `define MINIRISC_DEFS_VH
 
-// ---------------- 6-bit opcodes  [31:26] ----------------
-// R-type group (00xxxx)
-`define OP_ADD    6'b00_0000   // also encodes NOP when the whole word is 0
-`define OP_SUB    6'b00_0001
-`define OP_AND    6'b00_0010
-`define OP_OR     6'b00_0011
-`define OP_XOR    6'b00_0100
-`define OP_NOR    6'b00_0101
-`define OP_NOT    6'b00_0110
-`define OP_SLL    6'b00_0111
-`define OP_SRL    6'b00_1000
-`define OP_SRA    6'b00_1001
-`define OP_SLT    6'b00_1010
-`define OP_SGT    6'b00_1011
+
+
+
+// ----------------------------------------------------
+
+// R-type Group (00xxxx)
+
+`define OP_add 6'b00_0000   // also encodes NOP when the whole word is 0
+`define OP_sub 6'b00_0001
+`define OP_and 6'b00_0010
+`define OP_or 6'b00_0011
+`define OP_xor 6'b00_0100
+`define OP_nor 6'b00_0101
+`define OP_not 6'b00_0110
+`define OP_sll 6'b00_0111
+`define OP_srl 6'b00_1000
+`define OP_sra 6'b00_1001
+`define OP_slt 6'b00_1010
+`define OP_sgt 6'b00_1011
+
+
 // I-type group (01xxxx)
-`define OP_ADDI   6'b01_0000
-`define OP_SUBI   6'b01_0001
-`define OP_ANDI   6'b01_0010
-`define OP_ORI    6'b01_0011
-`define OP_XORI   6'b01_0100
-`define OP_SLLI   6'b01_0111
-`define OP_SRLI   6'b01_1000
-`define OP_SRAI   6'b01_1001
-`define OP_INC    6'b01_1010   // moved: 1A had 01_1000 (clashes with SRLI)
-`define OP_DEC    6'b01_1011   // moved: 1A had 01_1001 (clashes with SRAI)
-`define OP_LUI    6'b01_1110   // as read from the 1A sheet - verify
+
+`define OP_addi 6'b01_0000
+`define OP_subi 6'b01_0001
+`define OP_andi 6'b01_0010
+`define OP_ori 6'b01_0011
+`define OP_xori 6'b01_0100
+`define OP_slli 6'b01_0111
+`define OP_srli 6'b01_1000
+`define OP_srai 6'b01_1001
+`define OP_inc 6'b01_1010   
+`define OP_dec 6'b01_1011   
+`define OP_lui 6'b01_1110  
+
 // Memory / branch group (10xxxx)
-`define OP_LD     6'b10_0000
-`define OP_ST     6'b10_0001
-`define OP_B      6'b10_0010
-`define OP_BZ     6'b10_0011
-`define OP_BLTZ   6'b10_0100
-`define OP_BGTZ   6'b10_0101
+`define OP_ld 6'b10_0000
+`define OP_st 6'b10_0001
+`define OP_b 6'b10_0010
+`define OP_bz 6'b10_0011
+`define OP_bltz 6'b10_0100
+`define OP_bgtz 6'b10_0101
+
 // Multiply group + HALT (11xxxx)
-`define OP_MULL   6'b11_0000
-`define OP_MULH   6'b11_0001
-`define OP_MAC    6'b11_0010
-`define OP_HALT   6'b11_1111
+`define OP_mull 6'b11_0000
+`define OP_mulh 6'b11_0001
+`define OP_mac 6'b11_0010
+`define OP_halt 6'b11_1111
+
+// ----------------------------------------------------
 
 
+// ----------------------------------------------------
+// write-back select
+`define WB_alu 2'd0
+`define WB_mem 2'd1
+`define WB_other 2'd2    // endpoint left to add more modules later
 
-// ---------------- branch type ----------------
-`define BR_ALWAYS 2'd0   // B
-`define BR_Z      2'd1   // BZ   : Rs1 == 0
-`define BR_LTZ    2'd2   // BLTZ : Rs1 <  0 (signed)
-`define BR_GTZ    2'd3   // BGTZ : Rs1 >  0 (signed)
+// -----------------------------------------------------
 
-// ---------------- write-back select ----------------
-`define WB_ALU    2'd0
-`define WB_MEM    2'd1
-`define WB_OTHER  2'd2    // future: multiplier result
 
 
 // ----------------------------------------------------
