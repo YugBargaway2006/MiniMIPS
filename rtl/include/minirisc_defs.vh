@@ -1,7 +1,9 @@
-// ============================================================================
-// minirisc_defs.vh  -  shared constants for the MiniRISC datapath
-// Opcodes follow the "Proposed opcode allocation" page of Assignment 1A.
-// ============================================================================
+// Copyright (c) Yug Bargaway under Apache License 2.0
+// See LICENSE.txt for details.
+
+// This file is generated from claude as a starter template and will be updated during the course of the implmentation
+
+
 `ifndef MINIRISC_DEFS_VH
 `define MINIRISC_DEFS_VH
 
