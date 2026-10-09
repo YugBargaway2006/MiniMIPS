@@ -2,3 +2,4 @@ build/
 waves/*.vcd
 *.vvp
 __pycache__/
+TODO.md

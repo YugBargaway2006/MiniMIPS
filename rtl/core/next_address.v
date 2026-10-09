@@ -9,7 +9,7 @@
 
 
 module next_address #(
-    parameter integer PC_w = 10,
+    parameter integer PC_w = 32,
     parameter integer DATA_w = 32,
     parameter integer JTA_w = 26,
     parameter integer IMM_w = 16 

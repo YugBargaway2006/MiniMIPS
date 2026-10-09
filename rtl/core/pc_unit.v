@@ -6,7 +6,7 @@
 
 
 module pc_unit #(
-    parameter integer PC_w = 10,
+    parameter integer PC_w = 32,
     parameter [PC_w-1:0] RESET_PC = {PC_w{1'b0}}
 ) (
     input wire clk, reset,
