@@ -25,7 +25,7 @@ module reg_file #(
 
     localparam integer REG_count = (1 << REG_w);
 
-    reg [WORD_w:0] regs [0:REG_count-1];
+    reg [WORD_w-1:0] regs [0:REG_count-1];
     integer i;
 
     always @(posedge clock) begin 

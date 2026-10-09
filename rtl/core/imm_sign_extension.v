@@ -9,7 +9,9 @@
 
 
 module imm_sign_extension (
+    /* verilator lint_off UNUSEDSIGNAL */
     input wire [31:0] instr,
+    /* verilator lint_on UNUSEDSIGNAL */
     input wire [2:0] imm_sel,
 
     output reg [31:0] imm

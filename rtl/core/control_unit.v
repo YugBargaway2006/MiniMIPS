@@ -14,7 +14,9 @@ module control_unit #(
     parameter integer REGADDR_w = 4
 
 ) (
+    /* verilator lint_off UNUSEDSIGNAL */
     input wire [INSTR_w-1:0] instr,
+    /* verilator lint_on UNUSEDSIGNAL */
 
     output wire [OPCODE_w-1:0] opcode,
     output wire [REGADDR_w-1:0] rs1_addr,

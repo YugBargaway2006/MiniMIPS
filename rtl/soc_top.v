@@ -17,12 +17,13 @@ module soc_top #(
     input wire clock,
     input wire reset,
 
-    output wire halted
+    output wire halted,
+    output wire [PC_w-1:0] IncrPC,
+    output wire is_mul
 );
 
     wire [PC_w-1:0] PC;
     wire [PC_w-1:0] NextPC;
-    wire [PC_w-1:0] IncrPC;
 
     wire [31:0] instruction;
     wire [31:0] imm;
@@ -37,13 +38,16 @@ module soc_top #(
     wire [3:0] rt_addr;
     wire [3:0] rd_addr;
     wire [3:0] rw_addr;
+    /* verilator lint_off UNUSEDSIGNAL */
     wire [5:0] opcode;
+    /* verilator lint_on UNUSEDSIGNAL */
 
     wire [3:0] alu_ctrl;
     wire [2:0] imm_sel;
     wire [1:0] br_type;
     wire [1:0] wb_sel;
     wire [1:0] pc_src;
+    wire [1:0] reg_dst;
 
     wire alu_src_b;
     wire reg_write;
@@ -51,13 +55,15 @@ module soc_top #(
     wire mem_write;
     wire is_halt;
     wire is_branch;
-    wire is_mul;
+    /* verilator lint_off UNUSEDSIGNAL */
     wire illegal;
     wire alu_overflow;
     wire alu_zero;
     wire alu_negative;
+    /* verilator lint_on UNUSEDSIGNAL */
 
     assign pc_src = is_branch ? `PCSRC_branch : `PCSRC_incr;
+    assign reg_dst = (opcode[5:4] == 2'b00) ? 2'b01 : 2'b00;
     assign halted = is_halt;
 
     pc_unit #(
@@ -104,7 +110,7 @@ module soc_top #(
     ) register_destination (
         .rt    (rt_addr),
         .rd    (rd_addr),
-        .RegDst((opcode[5:4] == 2'b00) ? 2'b01 : 2'b00),
+        .RegDst(reg_dst),
         .rw    (rw_addr)
     );
 
@@ -156,7 +162,7 @@ module soc_top #(
         .branch_imm (instruction[15:0]),
         .syscall_addr({PC_w{1'b0}}),
         .pc_src     (pc_src),
-        .br_type    (br_type[0]),
+        .br_type    (br_type),
         .NextPC     (NextPC),
         .IncrPC     (IncrPC)
     );

@@ -17,7 +17,7 @@ module output_reg_mux #(parameter integer REG_w = 5) (
         case (RegDst)
             2'b00: rw = rt;
             2'b01: rw = rd;
-            2'b10: rw = 5'b11111;
+            2'b10: rw = {REG_w{1'b1}};
             default: rw = {REG_w{1'b0}};
         endcase
     end 

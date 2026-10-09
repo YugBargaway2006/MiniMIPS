@@ -11,7 +11,9 @@ module instruction_cache #(
     parameter integer CACHE_words = 256,
     parameter INIT_file = ""
 ) (
+    /* verilator lint_off UNUSEDSIGNAL */
     input wire [PC_w-1:0] PC,
+    /* verilator lint_on UNUSEDSIGNAL */
 
     output wire [WORD_w-1:0] Instruction 
 );

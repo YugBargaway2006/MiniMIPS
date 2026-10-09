@@ -14,7 +14,9 @@ module data_cache #(
     input wire clock,
     input wire reset,
 
+    /* verilator lint_off UNUSEDSIGNAL */
     input wire [ADDR_w-1:0] DataAddr,
+    /* verilator lint_on UNUSEDSIGNAL */
     input wire [DATA_w-1:0] DataIn,
 
     input wire DataRead,
@@ -37,8 +39,10 @@ module data_cache #(
 
     always @(posedge clock) begin 
         if(reset) begin 
+            /* verilator lint_off BLKSEQ */
             for(i = 0; i < CACHE_words; i = i+1) 
                 memory[i] = {DATA_w{1'b0}};
+            /* verilator lint_on BLKSEQ */
         end 
         else if (DataWrite) begin 
             memory[word_index] <= DataIn;
