@@ -46,20 +46,7 @@
 `define OP_MAC    6'b11_0010
 `define OP_HALT   6'b11_1111
 
-// ---------------- ALU control (4 bit) ----------------
-`define ALU_ADD   4'd0
-`define ALU_SUB   4'd1
-`define ALU_AND   4'd2
-`define ALU_OR    4'd3
-`define ALU_XOR   4'd4
-`define ALU_NOR   4'd5
-`define ALU_NOT   4'd6
-`define ALU_SLL   4'd7
-`define ALU_SRL   4'd8
-`define ALU_SRA   4'd9
-`define ALU_SLT   4'd10
-`define ALU_SGT   4'd11
-`define ALU_PASSB 4'd12   // Y = B  (used by LUI)
+
 
 // ---------------- branch type ----------------
 `define BR_ALWAYS 2'd0   // B
@@ -103,5 +90,25 @@
 
 // -----------------------------------------------------
 
+
+
+// ----------------------------------------------------
+
+// ALU Control Parameters
+`define ALU_add 4'd0
+`define ALU_sub 4'd1
+`define ALU_and 4'd2
+`define ALU_or 4'd3
+`define ALU_xor 4'd4
+`define ALU_nor 4'd5
+`define ALU_not 4'd6
+`define ALU_sll 4'd7
+`define ALU_srl 4'd8
+`define ALU_sra 4'd9
+`define ALU_slt 4'd10
+`define ALU_sgt 4'd11
+`define ALU_passb 4'd12   // Y = B  (for LUI)
+
+// -----------------------------------------------------
 
 `endif
