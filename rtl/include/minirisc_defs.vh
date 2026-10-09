@@ -77,14 +77,14 @@
 
 // Next Address Module Declarations
 // PCSRC enocding
-`define [1:0] PCSRC_incr 2'd0 
-`define [1:0] PCSRC_branch 2'd1
-`define [1:0] PCSRC_jump 2'd2
-`define [1:0] PCSRC_syscall 2'd3
+`define PCSRC_incr 2'd0 
+`define PCSRC_branch 2'd1
+`define PCSRC_jump 2'd2
+`define PCSRC_syscall 2'd3
 
 // BrType Encoding 
-`define [1:0] BRTYPE_eq 2'd0 
-`define [1:0] BRTYPE_ne 2'd1
+`define BRTYPE_eq 2'd0 
+`define BRTYPE_ne 2'd1
 
 // -----------------------------------------------------
 

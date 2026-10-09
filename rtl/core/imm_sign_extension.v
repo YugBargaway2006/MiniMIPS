@@ -17,13 +17,13 @@ module imm_sign_extension (
 
     always @(*) begin 
         case (imm_sel) 
-            `IMM_I_sext: imm32 = {{14{imm_i[17]}}, imm_i};
-            `IMM_I_zext: imm32 = {14'b0, imm_i};
-            `IMM_one   : imm32 = 32'd1;
-            `IMM_lui   : imm32 = {imm_i[13:0], 18'b0};
-            `IMM_S_sext: imm32 = {{14{imm_s[17]}}, imm_s};
-            `IMM_J_sext: imm32 = {{10{imm_j[21]}}, imm_j};
-            default    : imm32 = 32'd0;
+            `IMM_I_sext: imm = {{14{imm_i[17]}}, imm_i};
+            `IMM_I_zext: imm = {14'b0, imm_i};
+            `IMM_one   : imm = 32'd1;
+            `IMM_lui   : imm = {imm_i[13:0], 18'b0};
+            `IMM_S_sext: imm = {{14{imm_s[17]}}, imm_s};
+            `IMM_J_sext: imm = {{10{imm_j[21]}}, imm_j};
+            default    : imm = 32'd0;
         endcase 
     end 
 

@@ -11,10 +11,11 @@ module reg_file #(
 ) (
     input wire clock,
     input wire RegWrite,
+    input wire reset,
 
     input wire [REG_w-1:0] rs_add,
     input wire [REG_w-1:0] rt_add,
-    input wire [REG_w-1:0] rd_add,
+    input wire [REG_w-1:0] rw_add,
 
     input wire [WORD_w-1:0] data,
 
@@ -22,20 +23,22 @@ module reg_file #(
     output wire [WORD_w-1:0] rt_data
 );
 
-    reg [31:0] regs [0:31];
+    localparam integer REG_count = (1 << REG_w);
+
+    reg [WORD_w:0] regs [0:REG_count-1];
     integer i;
 
     always @(posedge clock) begin 
         if(reset) begin 
-            for (i = 0; i < 32; i = i+1) regs[i] <= 32'h0000_0000;
+            for (i = 0; i < REG_count; i = i+1) regs[i] <= {WORD_w{1'b0}};
         end 
         else if (RegWrite) begin 
-            regs[rd_add] <= data; 
+            regs[rw_add] <= data; 
 
         end 
     end 
 
     assign rs_data = regs[rs_add];
-    assign rd_data = regs[rd_add];
+    assign rt_data = regs[rt_add];
 
 endmodule
