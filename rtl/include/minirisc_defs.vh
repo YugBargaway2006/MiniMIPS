@@ -61,15 +61,6 @@
 `define ALU_SGT   4'd11
 `define ALU_PASSB 4'd12   // Y = B  (used by LUI)
 
-// ---------------- immediate select ----------------
-`define IMM_NONE   3'd0
-`define IMM_I_SEXT 3'd1   // instr[17:0], sign-extended   (ADDI, SUBI, LD)
-`define IMM_I_ZEXT 3'd2   // instr[17:0], zero-extended   (ANDI, ORI, XORI, shifts)
-`define IMM_ONE    3'd3   // constant 1                   (INC, DEC)
-`define IMM_LUI    3'd4   // {instr[13:0], 18'b0}         (LUI)
-`define IMM_S_SEXT 3'd5   // {instr[25:22], instr[13:0]}  (ST, BZ, ...)
-`define IMM_J_SEXT 3'd6   // instr[21:0], sign-extended   (B)
-
 // ---------------- branch type ----------------
 `define BR_ALWAYS 2'd0   // B
 `define BR_Z      2'd1   // BZ   : Rs1 == 0
@@ -98,6 +89,19 @@
 // -----------------------------------------------------
 
 
+
+// ----------------------------------------------------
+
+// Immediate Sign Extension Logic
+`define IMM_none 3'd0 
+`define IMM_I_sext 3'd1
+`define IMM_I_zext 3'd2 
+`define IMM_one 3'd3 
+`define IMM_lui 3'd4        // adding 0's to the lsb's 
+`define IMM_S_sext 3'd5 
+`define IMM_J_sext 3'd6 
+
+// -----------------------------------------------------
 
 
 `endif
