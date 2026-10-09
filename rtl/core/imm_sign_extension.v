@@ -1,3 +1,7 @@
+// Copyright (c) Yug Bargaway under Apache License 2.0
+// See LICENSE.txt for details.
+
+
 `timescale 1ns / 1ps
 
 
