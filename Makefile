@@ -11,16 +11,23 @@ IVFLAGS  := -g2012 -Wall -Irtl/include
 
 vpath %_tb.v tb/unit tb/system
 
-.PHONY: help test lint clean
+.PHONY: help compile test lint clean
 .PRECIOUS: $(BUILD)/%.vvp
 
 help:
+	@echo "make help                  print this help message"
+	@echo "make compile [TOP=...]     check syntax/elaboration with iverilog (default: TOP=$(TOP))"
+	@echo "make lint [TOP=...]        Verilator lint of rtl/ (default: TOP=$(TOP))"
 	@echo "make test                  run all testbenches, PASS/FAIL summary"
-	@echo "make run-<tb>              build and run one testbench (e.g. run-alu_tb)"
-	@echo "make run-<tb> HEX=<file>   pass +HEX=<file> to the testbench"
+	@echo "make run-<tb> [HEX=...]    build and run one testbench (e.g. run-alu_tb)"
 	@echo "make wave-<tb>             run, then open waves/<tb>.vcd in GTKWave"
-	@echo "make lint                  Verilator lint of rtl/ (TOP=$(TOP))"
 	@echo "make clean                 remove build output and waveforms"
+
+compile:
+	$(IVERILOG) $(IVFLAGS) -tnull -s $(TOP) $(RTL)
+
+lint:
+	verilator --lint-only -Wall -Irtl/include $(RTL) --top-module $(TOP)
 
 $(BUILD)/%.vvp: %.v $(RTL)
 	@mkdir -p $(BUILD) waves
@@ -41,9 +48,6 @@ test:
 	    echo "[FAIL] $$t"; echo "$$out" | grep "FAIL" | head -5; fail=1; \
 	  else echo "[PASS] $$t"; fi; \
 	done; exit $$fail
-
-lint:
-	verilator --lint-only -Wall -Irtl/include $(RTL) --top-module $(TOP)
 
 clean:
 	rm -rf $(BUILD) waves/*.vcd
