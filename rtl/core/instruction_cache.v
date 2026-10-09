@@ -7,7 +7,7 @@
 
 module instruction_cache #(
     parameter integer PC_w = 32,
-    parameter integer WORD_w = 32;
+    parameter integer WORD_w = 32,
     parameter integer CACHE_words = 256,
     parameter INIT_file = ""
 ) (

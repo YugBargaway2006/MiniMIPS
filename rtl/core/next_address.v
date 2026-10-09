@@ -38,7 +38,7 @@ module next_address #(
 
     assign IncrPC = PC[31:2] + 30'd1;
 
-    assign branch_offset = {14{branch_imm[15]}, branch_imm};     // Sign Extension
+    assign branch_offset = {{14{branch_imm[15]}}, branch_imm};     // Sign Extension
     assign branch_target = IncrPC + branch_offset;
 
     assign jump_target = {PC[31:28], jta};
@@ -46,29 +46,29 @@ module next_address #(
     assign registers_equal = (rs == rt);
 
     assign branch_true = 
-        (br_type == BRTYPE_eq) ? registers_equal :
-            (br_type == BRTYPE_ne) ? ~registers_equal : 
+        (br_type == `BRTYPE_eq) ? registers_equal :
+            (br_type == `BRTYPE_ne) ? ~registers_equal : 
                                      1'b0; 
 
 
     always @* begin 
         case (pc_src) 
-            PCSRC_incr: begin 
+            `PCSRC_incr: begin 
                 NextPC = IncrPC;
             end 
 
-            PCSRC_branch: begin 
+            `PCSRC_branch: begin 
                 if(branch_true) 
                     NextPC = branch_target;
                 else 
                     NextPC = IncrPC;
             end 
 
-            PCSRC_jump: begin 
+            `PCSRC_jump: begin 
                 NextPC = jump_target;
             end 
 
-            PCSRC_syscall: begin 
+            `PCSRC_syscall: begin 
                 NextPC = syscall_addr;
             end 
 
@@ -80,3 +80,4 @@ module next_address #(
     end 
 
 endmodule
+

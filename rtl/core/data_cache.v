@@ -38,7 +38,7 @@ module data_cache #(
     always @(posedge clock) begin 
         if(reset) begin 
             for(i = 0; i < CACHE_words; i = i+1) 
-                memory[i] <= {DATA_w{1'b0}};
+                memory[i] = {DATA_w{1'b0}};
         end 
         else if (DataWrite) begin 
             memory[word_index] <= DataIn;
