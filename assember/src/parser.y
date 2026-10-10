@@ -49,6 +49,7 @@ void yyerror(const char *message)
 %token ADDI SUBI ANDI ORI XORI SLLI SRLI SRAI INC DEC LUI
 %token LD ST B BZ BLTZ BGTZ
 %token MULL MULH MAC HALT NOP
+%token DIRECTIVE_WORD
 
 %start program
 

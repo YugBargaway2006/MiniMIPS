@@ -67,6 +67,7 @@ IDENTIFIER  [A-Za-z_][A-Za-z0-9_]*
 "mac"       return MAC;
 "halt"      return HALT;
 "nop"       return NOP;
+".word"     return DIRECTIVE_WORD;
 
 
 
