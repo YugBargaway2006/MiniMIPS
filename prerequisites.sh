@@ -118,6 +118,12 @@ check_cmd "Python 3" "python3" "sudo apt-get update && sudo apt-get install -y p
 # Python pip
 check_cmd "Python Pip" "pip" "sudo apt-get update && sudo apt-get install -y python3-pip"
 
+# Flex/Bison assembler toolchain
+check_cmd "Bison" "bison" "sudo apt-get update && sudo apt-get install -y bison"
+check_cmd "Flex" "flex" "sudo apt-get update && sudo apt-get install -y flex"
+check_cmd "GNU C Compiler" "gcc" "sudo apt-get update && sudo apt-get install -y gcc"
+check_cmd "GNU C++ Compiler" "g++" "sudo apt-get update && sudo apt-get install -y g++"
+
 # Matplotlib (with compatible numpy)
 check_python_module "matplotlib" "python3 -m pip install 'numpy<2' matplotlib --break-system-packages"
 

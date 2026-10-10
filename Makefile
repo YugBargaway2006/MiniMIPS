@@ -19,17 +19,22 @@ IVFLAGS  := -g2012 -Wall -Irtl/include
 
 vpath %_tb.v tb/unit tb/system
 
-.PHONY: help compile test lint clean
+.PHONY: help preset compile test lint clean
 .PRECIOUS: $(BUILD)/%.vvp
 
 help:
 	@echo "make help                  print this help message"
+	@echo "make preset                install/check prerequisites and build the assembler"
 	@echo "make compile [TOP=...]     check syntax/elaboration with iverilog (default: TOP=$(TOP))"
 	@echo "make lint [TOP=...]        Verilator lint of rtl/ (default: TOP=$(TOP))"
 	@echo "make test                  run all testbenches, PASS/FAIL summary"
 	@echo "make run-<tb> [HEX=...]    build and run one testbench (e.g. run-alu_tb)"
 	@echo "make wave-<tb>             run, then open waves/<tb>.vcd in GTKWave"
 	@echo "make clean                 remove build output and waveforms"
+
+preset:
+	bash prerequisites.sh
+	$(MAKE) -C assember
 
 compile:
 	$(IVERILOG) $(IVFLAGS) -tnull -s $(TOP) $(RTL)
@@ -45,7 +50,7 @@ run-%: $(BUILD)/%.vvp
 	$(VVP) $< $(if $(HEX),+HEX=$(HEX))
 
 wave-%: run-%
-	gtkwave waves/$*.vcd &
+	env -u GTK_PATH -u GTK_EXE_PREFIX -u GTK_IM_MODULE_FILE gtkwave waves/$*.vcd &
 
 test:
 	@fail=0; \
