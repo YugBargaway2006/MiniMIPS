@@ -1,0 +1,17 @@
+#ifndef MINIMIPS_ASSEMBLER_ISA_H
+#define MINIMIPS_ASSEMBLER_ISA_H
+
+enum minimips_opcode {
+    OP_ADD = 0x00, OP_SUB = 0x01, OP_AND = 0x02, OP_OR = 0x03,
+    OP_XOR = 0x04, OP_NOR = 0x05, OP_NOT = 0x06, OP_SLL = 0x07,
+    OP_SRL = 0x08, OP_SRA = 0x09, OP_SLT = 0x0a, OP_SGT = 0x0b,
+    OP_ADDI = 0x10, OP_SUBI = 0x11, OP_ANDI = 0x12, OP_ORI = 0x13,
+    OP_XORI = 0x14, OP_SLLI = 0x17, OP_SRLI = 0x18, OP_SRAI = 0x19,
+    OP_INC = 0x1a, OP_DEC = 0x1b, OP_LUI = 0x1e,
+    OP_LD = 0x20, OP_ST = 0x21, OP_B = 0x22, OP_BZ = 0x23,
+    OP_BLTZ = 0x24, OP_BGTZ = 0x25,
+    OP_MULL = 0x30, OP_MULH = 0x31, OP_MAC = 0x32,
+    OP_HALT = 0x3f
+};
+
+#endif
