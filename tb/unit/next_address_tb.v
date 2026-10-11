@@ -93,55 +93,55 @@ module next_address_tb;
         br_type = `BRTYPE_eq;
 
         // Sequential increment
-        // PC = 0 -> IncrPC = 1 (word address increment: PC[31:2] + 1 = 1)
+        // PC is a byte address, so each instruction advances by 4 bytes.
         PC = 32'h00000000;
         pc_src = `PCSRC_incr;
-        check(32'd1, 32'd1, "INCR: PC=0 -> NextPC=1");
+        check(32'd4, 32'd4, "INCR: PC=0 -> NextPC=4");
 
-        PC = 32'd4; // word address 1
-        check(32'd2, 32'd2, "INCR: PC=4 -> NextPC=2");
+        PC = 32'd4;
+        check(32'd8, 32'd8, "INCR: PC=4 -> NextPC=8");
 
         // Branch equal (BRTYPE_eq) TAKEN (rs == rt)
-        // branch_target = IncrPC + sign_ext(branch_imm)
-        // PC = 0 -> IncrPC = 1, branch_imm = 5 -> target = 6
+        // Branch offsets are instruction-word offsets and are converted to bytes.
+        // PC = 0 -> IncrPC = 4, branch_imm = 5 -> target = 24
         PC = 32'd0;
         rs = 32'd42; rt = 32'd42;
         branch_imm = 16'd5;
         br_type = `BRTYPE_eq;
         pc_src = `PCSRC_branch;
-        check(32'd6, 32'd1, "BRANCH EQUAL: taken forward (+5)");
+        check(32'd24, 32'd4, "BRANCH EQUAL: taken forward (+5)");
 
         // Backward branch (-3)
-        // IncrPC = 1 + (-3) = -2 (as 30-bit: 0x3FFFFFFE)
+        // IncrPC word index 1 + (-3) = -2, converted to byte address -8.
         branch_imm = -16'd3;
-        check(32'h3FFFFFFE, 32'd1, "BRANCH EQUAL: taken backward (-3)");
+        check(32'hFFFFFFF8, 32'd4, "BRANCH EQUAL: taken backward (-3)");
 
         // Branch equal NOT TAKEN (rs != rt)
         rs = 32'd42; rt = 32'd99;
         branch_imm = 16'd5;
-        check(32'd1, 32'd1, "BRANCH EQUAL: not taken -> NextPC = IncrPC");
+        check(32'd4, 32'd4, "BRANCH EQUAL: not taken -> NextPC = IncrPC");
 
         // Branch not equal (BRTYPE_ne) TAKEN (rs != rt)
         rs = 32'd42; rt = 32'd99;
         branch_imm = 16'd10;
         br_type = `BRTYPE_ne;
-        check(32'd11, 32'd1, "BRANCH NOT EQUAL: taken forward (+10)");
+        check(32'd44, 32'd4, "BRANCH NOT EQUAL: taken forward (+10)");
 
         // Branch not equal NOT TAKEN (rs == rt)
         rs = 32'd42; rt = 32'd42;
-        check(32'd1, 32'd1, "BRANCH NOT EQUAL: not taken -> NextPC = IncrPC");
+        check(32'd4, 32'd4, "BRANCH NOT EQUAL: not taken -> NextPC = IncrPC");
 
         // Jump (PCSRC_jump)
         // jump_target = {PC[31:28], jta}
         PC = 32'h10000000; // top 4 bits: 4'h1
         jta = 26'h03FFFFF;
         pc_src = `PCSRC_jump;
-        check({4'h1, 26'h03FFFFF}, 32'h04000001, "JUMP: jump_target formation");
+        check({4'h1, 26'h03FFFFF}, 32'h10000004, "JUMP: jump_target formation");
 
         // Syscall (PCSRC_syscall)
         syscall_addr = 32'h00000100;
         pc_src = `PCSRC_syscall;
-        check(32'h00000100, 32'h04000001, "SYSCALL: syscall_addr");
+        check(32'h00000100, 32'h10000004, "SYSCALL: syscall_addr");
 
 
         #5;

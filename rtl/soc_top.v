@@ -63,7 +63,7 @@ module soc_top #(
     /* verilator lint_on UNUSEDSIGNAL */
 
     assign pc_src = is_branch ? `PCSRC_branch : `PCSRC_incr;
-    assign reg_dst = (opcode[5:4] == 2'b00) ? 2'b01 : 2'b00;
+    assign reg_dst = 2'b01;
     assign halted = is_halt;
 
     pc_unit #(

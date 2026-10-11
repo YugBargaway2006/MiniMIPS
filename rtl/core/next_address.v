@@ -40,7 +40,7 @@ module next_address #(
 
 
     assign incremented_pc = PC[31:2] + 30'd1;
-    assign IncrPC = {{(PC_w-30){1'b0}}, incremented_pc};
+    assign IncrPC = ({{(PC_w-30){1'b0}}, incremented_pc} << 2);
 
     assign branch_offset = {{14{branch_imm[15]}}, branch_imm};     // Sign Extension
     assign branch_target = incremented_pc + branch_offset;
@@ -63,7 +63,7 @@ module next_address #(
 
             `PCSRC_branch: begin 
                 if(branch_true) 
-                    NextPC = {{(PC_w-30){1'b0}}, branch_target};
+                    NextPC = ({{(PC_w-30){1'b0}}, branch_target} << 2);
                 else 
                     NextPC = IncrPC;
             end 
