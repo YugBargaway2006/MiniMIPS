@@ -23,6 +23,7 @@ module soc_tb;
 
     reg [1023:0] hex_path;
     reg [1023:0] dump_path;
+    reg [1023:0] trace_path;
     integer timeout_cycles;
     integer memory_start;
     integer memory_words;
@@ -31,6 +32,7 @@ module soc_tb;
     integer register_index;
     integer memory_index;
     integer dump_file;
+    integer trace_file;
     integer unknown_registers;
     integer out_of_range;
 
@@ -50,6 +52,9 @@ module soc_tb;
     task fail_and_finish;
         input [1023:0] reason;
         begin
+            if (trace_file != 0) begin
+                $fclose(trace_file);
+            end
             $display("FAIL: %0s", reason);
             $finish;
         end
@@ -92,13 +97,16 @@ module soc_tb;
 
         hex_path = "sw/hex/smoke.hex";
         dump_path = "build/soc_tb.dump";
+        trace_path = "build/soc_tb.trace";
         timeout_cycles = DEFAULT_TIMEOUT_CYCLES;
         memory_start = 0;
         memory_words = 16;
         trace_enabled = 0;
+        trace_file = 0;
 
         void'($value$plusargs("HEX=%s", hex_path));
         void'($value$plusargs("DUMP=%s", dump_path));
+        void'($value$plusargs("TRACE_FILE=%s", trace_path));
         void'($value$plusargs("TIMEOUT=%d", timeout_cycles));
         void'($value$plusargs("MEM_START=%d", memory_start));
         void'($value$plusargs("MEM_WORDS=%d", memory_words));
@@ -113,11 +121,29 @@ module soc_tb;
 
         $display("HEX=%0s", hex_path);
         $display("DUMP=%0s", dump_path);
+        if (trace_enabled != 0) begin
+            trace_file = $fopen(trace_path, "w");
+            if (trace_file == 0) begin
+                fail_and_finish("could not open trace file");
+            end
+            $fdisplay(trace_file,
+                      "cycle PC instruction alu_out reg_write mem_read mem_write halted");
+            $display("TRACE=%0s", trace_path);
+        end
         $readmemh(hex_path, dut.instruction_memory.memory);
 
         repeat (2) @(posedge clock);
         #1;
         reset = 1'b0;
+
+        if (trace_enabled != 0) begin
+            $fdisplay(trace_file,
+                      "%0d 0x%08h 0x%08h 0x%08h %b %b %b %b",
+                      cycle_count, dut.PC, dut.instruction, dut.alu_out,
+                      dut.reg_write, dut.mem_read, dut.mem_write, halted);
+            $display("TRACE cycle=%0d PC=0x%08h instr=0x%08h alu=0x%08h halted=%b",
+                     cycle_count, dut.PC, dut.instruction, dut.alu_out, halted);
+        end
 
         while (cycle_count < timeout_cycles) begin
             @(posedge clock);
@@ -125,9 +151,12 @@ module soc_tb;
             cycle_count = cycle_count + 1;
 
             if (trace_enabled != 0) begin
-                $display("TRACE cycle=%0d PC=0x%08h instr=0x%08h halted=%b R0=0x%08h",
-                         cycle_count, dut.PC, dut.instruction, halted,
-                         dut.registers.regs[0]);
+                $fdisplay(trace_file,
+                          "%0d 0x%08h 0x%08h 0x%08h %b %b %b %b",
+                          cycle_count, dut.PC, dut.instruction, dut.alu_out,
+                          dut.reg_write, dut.mem_read, dut.mem_write, halted);
+                $display("TRACE cycle=%0d PC=0x%08h instr=0x%08h alu=0x%08h halted=%b",
+                         cycle_count, dut.PC, dut.instruction, dut.alu_out, halted);
             end
 
             if (halted === 1'b1) begin
@@ -145,6 +174,9 @@ module soc_tb;
                 end
 
                 dump_state();
+                if (trace_file != 0) begin
+                    $fclose(trace_file);
+                end
                 $display("cycles=%0d", cycle_count);
                 $display("[PASS] soc_tb: halted cleanly");
                 $finish;

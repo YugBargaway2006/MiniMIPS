@@ -30,6 +30,8 @@ make wave-soc_tb HEX=sw/hex/smoke.hex
 The instruction format, memory ranges, and halt encoding are documented in
 [`docs/memory_map.md`](docs/memory_map.md). The assembler has its own project
 notes in [`assember/README.md`](assember/README.md).
+Expected smoke-program results are listed in
+[`docs/smoke_test.md`](docs/smoke_test.md).
 
 ## Checks
 

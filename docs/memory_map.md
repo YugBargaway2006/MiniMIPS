@@ -1,5 +1,8 @@
 # MiniMIPS Memory Map
 
+This describes the current simulation RTL. Instruction and data memory are
+separate; no shared bus or MMIO peripheral is implemented yet.
+
 ## Address Space (32-bit word-aligned)
 
 | Region | Base Address | End Address | Size | Description |
@@ -9,6 +12,10 @@
 
 > Note: Instruction and data memories are **separate** (Harvard architecture).
 > Both are indexed by `word_index = addr[9:2]` (8-bit index, ignoring byte offset bits [1:0]).
+> The same numeric address can therefore exist in both memories.
+
+There is currently no console address, halt address, interrupt region, or
+uncached MMIO region.
 
 ## Reset and Halt
 
@@ -63,5 +70,13 @@ FC000000   // halt
 ## PC Addressing
 
 - PC is a **byte address** (32-bit), increments by 4 bytes (1 instruction word) each cycle.
-- Internally, `next_address` computes: `IncrPC = PC[31:2] + 1` (word-address arithmetic), then zero-pads to 32 bits.
+- Internally, `next_address` increments `PC[31:2]` by one word and shifts the
+	result left by two to produce the byte address.
+- Branch immediates are instruction-word offsets and are converted to byte
+	addresses by the same logic.
 - Instruction fetch: `word_index = PC[9:2]` (8-bit, selecting from 256-word cache).
+
+## Current Execution Model
+
+The current `soc_top` is a single-cycle datapath. IF/ID/EX/MEM/WB pipeline
+registers, forwarding, and hazard logic are not implemented yet.
