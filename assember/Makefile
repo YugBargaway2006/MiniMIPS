@@ -31,8 +31,10 @@ all: $(TARGET)
 $(BUILD):
 	mkdir -p $(BUILD)
 
-$(PARSER_C) $(PARSER_H): src/parser.y | $(BUILD)
+$(PARSER_C): src/parser.y | $(BUILD)
 	$(BISON) -Wall -Werror -d -o $(PARSER_C) src/parser.y
+
+$(PARSER_H): $(PARSER_C)
 
 $(LEXER_C): src/lexer.l $(PARSER_H) | $(BUILD)
 	$(FLEX) -o $@ src/lexer.l
